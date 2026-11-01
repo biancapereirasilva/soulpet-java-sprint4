@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//resource - equivalente a controller
 @RestController
 @RequestMapping("/missoes")
 public class MissaoResource {
