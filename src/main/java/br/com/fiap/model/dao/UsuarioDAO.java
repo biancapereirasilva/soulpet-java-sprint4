@@ -64,8 +64,7 @@ public class UsuarioDAO {
 
     public UsuarioTO save(UsuarioTO usuario) {
         String sql = "insert into DDD_USUARIOS (nm_usuario, ds_email, ds_senha, nr_telefone, qt_pontos, tp_nivel) values (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = ConnectionFactory.getConnection()
-                .prepareStatement(sql, new String[]{"ID_USUARIO"})) {
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ps.setString(1, usuario.getNome());
             ps.setString(2, usuario.getEmail());
             ps.setString(3, usuario.getSenha());
@@ -73,11 +72,6 @@ public class UsuarioDAO {
             ps.setInt(5, usuario.getPontos());
             ps.setString(6, usuario.getNivel());
             if (ps.executeUpdate() > 0) {
-                try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        usuario.setCodigo(rs.getLong(1));
-                    }
-                }
                 return usuario;
             } else {
                 return null;

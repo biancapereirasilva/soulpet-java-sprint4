@@ -62,19 +62,13 @@ public class MissaoDAO {
 
     public MissaoTO save(MissaoTO missao) {
         String sql = "insert into DDD_MISSAO (nm_titulo, ds_missao, qt_pontos_recompensa, st_concluida, id_comunidade) values (?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = ConnectionFactory.getConnection()
-                .prepareStatement(sql, new String[]{"ID_MISSAO"})) {
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ps.setString(1, missao.getTitulo());
             ps.setString(2, missao.getDescricao());
             ps.setInt(3, missao.getPontosRecompensa());
             ps.setString(4, missao.isConcluida() ? "S" : "N");
             ps.setLong(5, missao.getCodComunidade());
             if (ps.executeUpdate() > 0) {
-                try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        missao.setCodigo(rs.getLong(1));
-                    }
-                }
                 return missao;
             } else {
                 return null;

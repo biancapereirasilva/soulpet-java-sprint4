@@ -20,14 +20,6 @@ public class UsuarioMissaoTO {
     public UsuarioMissaoTO() {
     }
 
-    public UsuarioMissaoTO(Long codigo, boolean concluida, LocalDate dataConclusao, Long codUsuario, Long codMissao) {
-        this.codigo = codigo;
-        this.concluida = concluida;
-        this.dataConclusao = dataConclusao;
-        this.codUsuario = codUsuario;
-        this.codMissao = codMissao;
-    }
-
     public Long getCodigo() {
         return codigo;
     }

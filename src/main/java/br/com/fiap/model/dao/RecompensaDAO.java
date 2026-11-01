@@ -62,19 +62,13 @@ public class RecompensaDAO {
 
     public RecompensaTO save(RecompensaTO recompensa) {
         String sql = "insert into DDD_RECOMPENSAS (nm_recompensa, ds_recompensa, qt_custo_pontos, tp_recompensa, qt_estoque) values (?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = ConnectionFactory.getConnection()
-                .prepareStatement(sql, new String[]{"ID_RECOMPENSA"})) {
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ps.setString(1, recompensa.getNome());
             ps.setString(2, recompensa.getDescricao());
             ps.setInt(3, recompensa.getCustoPontos());
             ps.setString(4, recompensa.getTipo());
             ps.setInt(5, recompensa.getEstoque());
             if (ps.executeUpdate() > 0) {
-                try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        recompensa.setCodigo(rs.getLong(1));
-                    }
-                }
                 return recompensa;
             } else {
                 return null;

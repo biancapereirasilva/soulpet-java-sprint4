@@ -1,10 +1,11 @@
 package br.com.fiap.model.to;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 
 public class UsuarioTO {
+    //atributos
     private Long codigo;
+    //annotations
     @NotBlank
     @Size(max = 100)
     private String nome;
@@ -12,7 +13,6 @@ public class UsuarioTO {
     @Email
     @Size(max = 150)
     private String email;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Size(max = 100)
     private String senha;
     @NotBlank
@@ -25,6 +25,7 @@ public class UsuarioTO {
     @Size(max = 20)
     private String nivel;
 
+    //construtores
     public UsuarioTO() {
     }
 
@@ -38,6 +39,7 @@ public class UsuarioTO {
         this.nivel = nivel;
     }
 
+    //métodos getters/setters
     public Long getCodigo() {
         return codigo;
     }

@@ -6,13 +6,12 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 
 public class UsuarioMissaoDAO {
 
     public ArrayList<UsuarioMissaoTO> findAll() {
-        ArrayList<UsuarioMissaoTO> usuarioMissaos = new ArrayList<>();
+        ArrayList<UsuarioMissaoTO> usuarioMissoes = new ArrayList<>();
         String sql = "select * from DDD_USUARIO_MISSAO order by id_usuario_missao";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
@@ -25,7 +24,7 @@ public class UsuarioMissaoDAO {
                     usuarioMissao.setDataConclusao(dataConclusaoSql != null ? dataConclusaoSql.toLocalDate() : null);
                     usuarioMissao.setCodUsuario(rs.getLong("id_usuario"));
                     usuarioMissao.setCodMissao(rs.getLong("id_missao"));
-                    usuarioMissaos.add(usuarioMissao);
+                    usuarioMissoes.add(usuarioMissao);
                 }
             } else {
                 return null;
@@ -35,7 +34,7 @@ public class UsuarioMissaoDAO {
         } finally {
             ConnectionFactory.closeConnection();
         }
-        return usuarioMissaos;
+        return usuarioMissoes;
     }
 
     public static UsuarioMissaoTO findByCodigo(Long codigo) {
@@ -64,22 +63,12 @@ public class UsuarioMissaoDAO {
 
     public UsuarioMissaoTO save(UsuarioMissaoTO usuarioMissao) {
         String sql = "insert into DDD_USUARIO_MISSAO (st_concluida, dt_conclusao, id_usuario, id_missao) values (?, ?, ?, ?)";
-        try (PreparedStatement ps = ConnectionFactory.getConnection()
-                .prepareStatement(sql, new String[]{"ID_USUARIO_MISSAO"})) {
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ps.setString(1, usuarioMissao.isConcluida() ? "S" : "N");
-            if (usuarioMissao.getDataConclusao() != null) {
-                ps.setDate(2, Date.valueOf(usuarioMissao.getDataConclusao()));
-            } else {
-                ps.setNull(2, Types.DATE);
-            }
+            ps.setDate(2, usuarioMissao.getDataConclusao() != null ? Date.valueOf(usuarioMissao.getDataConclusao()) : null);
             ps.setLong(3, usuarioMissao.getCodUsuario());
             ps.setLong(4, usuarioMissao.getCodMissao());
             if (ps.executeUpdate() > 0) {
-                try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        usuarioMissao.setCodigo(rs.getLong(1));
-                    }
-                }
                 return usuarioMissao;
             } else {
                 return null;
@@ -109,11 +98,7 @@ public class UsuarioMissaoDAO {
         String sql = "update DDD_USUARIO_MISSAO set st_concluida = ?, dt_conclusao = ?, id_usuario = ?, id_missao = ? where id_usuario_missao = ?";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ps.setString(1, usuarioMissao.isConcluida() ? "S" : "N");
-            if (usuarioMissao.getDataConclusao() != null) {
-                ps.setDate(2, Date.valueOf(usuarioMissao.getDataConclusao()));
-            } else {
-                ps.setNull(2, Types.DATE);
-            }
+            ps.setDate(2, usuarioMissao.getDataConclusao() != null ? Date.valueOf(usuarioMissao.getDataConclusao()) : null);
             ps.setLong(3, usuarioMissao.getCodUsuario());
             ps.setLong(4, usuarioMissao.getCodMissao());
             ps.setLong(5, usuarioMissao.getCodigo());

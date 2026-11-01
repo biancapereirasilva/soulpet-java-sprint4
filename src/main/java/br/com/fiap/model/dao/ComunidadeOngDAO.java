@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ComunidadeOngDAO {
 
     public ArrayList<ComunidadeOngTO> findAll() {
-        ArrayList<ComunidadeOngTO> comunidadeOngs = new ArrayList<>();
+        ArrayList<ComunidadeOngTO> comunidades = new ArrayList<>();
         String sql = "select * from DDD_COMUNIDADE_ONG order by id_comunidade";
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
@@ -21,7 +21,7 @@ public class ComunidadeOngDAO {
                     comunidadeOng.setNome(rs.getString("nm_comunidade"));
                     comunidadeOng.setDescricao(rs.getString("ds_comunidade"));
                     comunidadeOng.setContato(rs.getString("ds_contato"));
-                    comunidadeOngs.add(comunidadeOng);
+                    comunidades.add(comunidadeOng);
                 }
             } else {
                 return null;
@@ -31,7 +31,7 @@ public class ComunidadeOngDAO {
         } finally {
             ConnectionFactory.closeConnection();
         }
-        return comunidadeOngs;
+        return comunidades;
     }
 
     public static ComunidadeOngTO findByCodigo(Long codigo) {
@@ -58,17 +58,11 @@ public class ComunidadeOngDAO {
 
     public ComunidadeOngTO save(ComunidadeOngTO comunidadeOng) {
         String sql = "insert into DDD_COMUNIDADE_ONG (nm_comunidade, ds_comunidade, ds_contato) values (?, ?, ?)";
-        try (PreparedStatement ps = ConnectionFactory.getConnection()
-                .prepareStatement(sql, new String[]{"ID_COMUNIDADE"})) {
+        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ps.setString(1, comunidadeOng.getNome());
             ps.setString(2, comunidadeOng.getDescricao());
             ps.setString(3, comunidadeOng.getContato());
             if (ps.executeUpdate() > 0) {
-                try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        comunidadeOng.setCodigo(rs.getLong(1));
-                    }
-                }
                 return comunidadeOng;
             } else {
                 return null;
