@@ -19,15 +19,6 @@ public class MissaoTO {
 
     public MissaoTO() {}
 
-    public MissaoTO(Long codigo, String titulo, String descricao, Integer pontosRecompensa, boolean concluida, Long codComunidade) {
-        this.codigo = codigo;
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.pontosRecompensa = pontosRecompensa;
-        this.concluida = concluida;
-        this.codComunidade = codComunidade;
-    }
-
     public Long getCodigo() {
         return codigo;
     }
