@@ -5,9 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class MissaoTO {
-    //atributos
     private Long codigo;
-    //annotations
     @NotBlank
     @Size(max = 100)
     private String titulo;
@@ -19,7 +17,6 @@ public class MissaoTO {
     @NotNull
     private Long codComunidade;
 
-    //construtores
     public MissaoTO() {}
 
     public MissaoTO(Long codigo, String titulo, String descricao, Integer pontosRecompensa, boolean concluida, Long codComunidade) {
@@ -31,7 +28,6 @@ public class MissaoTO {
         this.codComunidade = codComunidade;
     }
 
-    //métodos getters/setters
     public Long getCodigo() {
         return codigo;
     }
