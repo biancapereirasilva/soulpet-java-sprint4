@@ -5,22 +5,26 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
-    private static Connection connection;
+    private static final ThreadLocal<Connection> connection = new ThreadLocal<>();
 
     public static void closeConnection() {
+        Connection conn = connection.get();
         try {
-            if (!connection.isClosed()) {
-                connection.close();
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
             }
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
+        } finally {
+            connection.remove();
         }
     }
 
     public static Connection getConnection() {
         try {
-            if (connection != null && !connection.isClosed()) {
-                return connection;
+            Connection conn = connection.get();
+            if (conn != null && !conn.isClosed()) {
+                return conn;
             }
             Class.forName("oracle.jdbc.driver.OracleDriver");
 
@@ -32,12 +36,14 @@ public class ConnectionFactory {
                 throw new RuntimeException("Variáveis de ambiente do banco não configuradas!");
             }
 
-            connection = DriverManager.getConnection(url, user, password);
+            conn = DriverManager.getConnection(url, user, password);
+            connection.set(conn);
+            return conn;
         } catch (SQLException e) {
             System.out.println("Erro de SQL: " + e.getMessage());
         } catch (ClassNotFoundException e) {
             System.out.println("Erro nome da classe: " + e.getMessage());
         }
-        return connection;
+        return null;
     }
 }
